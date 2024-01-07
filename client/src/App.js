@@ -15,11 +15,14 @@ const meetingArgs = {
 const App = () => {
   return (
     <div>
+      <UserContext.Provider value={meetingArgs}>
         <BrowserRouter>
           <Routes>
-
+            <Route path = '/' element={<Home/>}/>
+            <Route path = '/Session' element={<Session/>}/>
           </Routes>
         </BrowserRouter>
+        </UserContext.Provider>
     </div>
   )
 }

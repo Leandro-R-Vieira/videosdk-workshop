@@ -9,8 +9,33 @@ const Home = () => {
   const [username, updateUsername] = useState('');
   const [password, updatePassword] = useState('');
 
+  const client = useContext(ClientContext);
+  const meetingArgs = useContext(UserContext);
 
-  
+  const navigate = useNavigate();
+
+  const SubmitUserData = async () => {
+    meetingArgs.name = username;
+    meetingArgs.password = password;
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(meetingArgs)
+    }
+
+    let response = await fetch('http://localhost:4000/generate', requestOptions).then(response => response.json());
+    meetingArgs.signature = response;
+
+    client.init('pt-BR', 'CDN').then(() => {
+      console.log('Sessão Iniciada');
+      navigate('/session')
+    }).catch((err) => {
+      console.log(err)
+    })
+
+  }
+    
   return (
     <div className="login-page">
     <div className="login-box">
@@ -20,7 +45,7 @@ const Home = () => {
       initialValues={{
         remember: true,
       }}
-      onFinish={submitUserData}
+      onFinish={SubmitUserData}
       // onFinishFailed={onSubmitFailed}
       autoComplete="off"
     >

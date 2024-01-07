@@ -11,6 +11,10 @@ userControllers.generateToken = (req, res, next) => {
 
         const oHeader = { alg: 'HS256', typ: 'JWT' };
 
+        const {topic, password, name, roleType} = req.body;
+        const sdkKey = process.env.SDK_KEY;
+        const sdkSecret = process.env.SDK_SECRET;
+
         //get credentials 
 
 
@@ -29,7 +33,7 @@ userControllers.generateToken = (req, res, next) => {
         signature = KJUR.jws.JWS.sign('HS256', sHeader, sPayload, sdkSecret);
 
         //save signature
-  
+        res.locals.signature = signature;
 
         return next();
     }
